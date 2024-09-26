@@ -1,0 +1,81 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: aysls
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: book-store
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-1
+  httpApi:
+    authorizers:
+      bsauthorizer:
+        type: request
+        functionName: authorizer
+
+functions:
+  authorizer:
+    handler: authorizer.bookStoreAuthorizer
+  get-users:
+    handler: handlers.getUsers
+    events:
+      - httpApi:
+          path: /{apiKey}/users
+          method: get
+          authorizer: bsauthorizer
+  get-writers:
+    handler: handlers.getWriters
+    events:
+      - httpApi:
+          path: /{apiKey}/writers
+          method: get
+          authorizer: bsauthorizer
+  get-books:
+    handler: handlers.getBooks
+    events:
+      - httpApi:
+          path: /{apiKey}/books
+          method: get
+          authorizer: bsauthorizer
+  create-user:
+    handler: handlers.createUser
+    events:
+      - httpApi:
+          path: /{apiKey}/users
+          method: post
+          authorizer: bsauthorizer
+  create-writer:
+    handler: handlers.createWriter
+    events:
+      - httpApi:
+          path: /{apiKey}/writers
+          method: post
+          authorizer: bsauthorizer
+  create-book:
+    handler: handlers.createBook
+    events:
+      - httpApi:
+          path: /{apiKey}/books
+          method: post
+          authorizer: bsauthorizer
+  update-user-by-id:
+    handler: handlers.updateUserByID
+    events:
+      - httpApi:
+          path: /{apiKey}/users/{_id}
+          method: put
+          authorizer: bsauthorizer
+  update-writer-by-id:
+    handler: handlers.updateWriterByID
+    events:
+      - httpApi:
+          path: /{apiKey}/writers/{_id}
+          method: put
+          authorizer: bsauthorizer
+  update-book-by-id:
+    handler: handlers.updateBookByID
+    events:
+      - httpApi:
+          path: /{apiKey}/books/{_id}
+          method: put
+          authorizer: bsauthorizer
